@@ -1,11 +1,15 @@
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 
-export default function send(sql) {
+export function sendQuery(sqlQuery, dbName) {
     return new Promise((resolve) => {
-        ipcRenderer.once('asynchronous-reply', (_, arg) => {
+        ipcRenderer.once('query-reply', (_, arg) => {
             resolve(arg);
         });
-        ipcRenderer.send('asynchronous-message', sql);
+        ipcRenderer.send('query-message', sqlQuery, dbName);
     });
 }
+
+export function createDB(totalR, asilR, dbName) {
+  ipcRenderer.send('create-db', totalR, asilR, dbName);
+};

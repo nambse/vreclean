@@ -19,8 +19,11 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
     "autoprefixer": "^10.4.12",
+    "aws-sdk": "^2.1223.0",
     "electron": "^20.0.2",
     "electron-builder": "^23.3.3",
+    "mock-aws-s3": "^4.0.2",
+    "nock": "^13.2.9",
     "postcss": "^8.4.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -39,6 +42,7 @@
     }
   },
   "dependencies": {
-    "sqlite3": "^5.1.1"
+    "sqlite3": "^5.1.1",
+    "xlsx": "^0.18.5"
   }
 }
