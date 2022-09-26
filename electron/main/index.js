@@ -16,6 +16,20 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
+import '../../src/sendAsync/main';
+
+const sqlite3 = require('sqlite3').verbose();
+const database = new sqlite3.Database('sefa.sqlite3', (err) => {
+  if (err) console.error('Database opening error: ', err)
+});
+
+ipcMain.on('asynchronous-message', (event, arg) => {
+  const sql = arg;
+  database.all(sql, (err, rows) => {
+    event.reply('asynchronous-reply', (err && err.message) || rows);
+  });
+});
+
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -65,6 +79,7 @@ async function createWindow() {
 }
 
 app.whenReady().then(createWindow)
+
 
 app.on('window-all-closed', () => {
   win = null

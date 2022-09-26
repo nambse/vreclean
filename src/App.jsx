@@ -1,7 +1,9 @@
 import { MemoryRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useState } from "react";
-import { ipcRenderer } from "electron";
 import "./assets/styles/index.css";
+import sendAsync from './sendAsync/renderer';
+
+const sqlite3 = require('sqlite3').verbose();
 
 const Header = () => {
   return (
@@ -17,9 +19,13 @@ const Header = () => {
 };
 
 const Home = () => {
-  const deneme = () => {
-    ipcRenderer.send("key", "sefa")
+  const [message, setMessage] = useState('SELECT * FROM lorem');
+  const [response, setResponse] = useState();
+
+  function send(sql) {
+    sendAsync(sql).then((result) => setResponse(result));
   }
+
   return (
     <div className="h-full flex flex-col">
       <Header />
@@ -32,20 +38,18 @@ const Home = () => {
             <Link to="/newrafflepage">Yeni Kura</Link>
           </li>
         </ul>
-        <button onClick={deneme}>Tıkla</button>
+        <button onClick={() => send(message)}>Tıkla</button>
+        {(response && JSON.stringify(response, null, 2).replace(/['"]+/g, '')) || 'No query results yet!'}
       </div>
     </div>
   );
 };
 
 const NewRafflePage = () => {
-  const deneme = () => {
-    ipcRenderer.send("key", "value")
-  }
   return (
     <div>
       <Header />
-      <button onClick={deneme}>Tıkla</button>
+      <button onClick={deneme2}>Tıkla</button>
     </div>
   );
 };
